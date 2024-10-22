@@ -38,7 +38,7 @@ jobs:
       #4 Setup Keystore
       - name: Decode Keystore
         run: |
-          echo "${{ secrets.KEYSTORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
+          echo "${{ secrets.KEY_STORE_BASE64 }}" | base64 --decode > android/app/keystore.jks
           ls -1 android
       #4 Build APK (Android)
       - name: Build APK (android)
