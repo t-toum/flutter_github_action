@@ -28,3 +28,6 @@ jobs:
         run: |
           flutter --version
           flutter pub get
+      #4 Build APK (Android)
+      - name: Build APK (android)
+        run: flutter build apk --release
