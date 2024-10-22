@@ -28,7 +28,11 @@ jobs:
         run: |
           flutter --version
           flutter pub get
-      # - name: 
+      - name: Load environment
+        run: |
+          echo "APP_ANME=${{secrets.APP_ANME}}" > .env
+      - name: Generate env
+        run: flutter pub run build_runner build --delete-conflicting-outputs
       #4 Build APK (Android)
       - name: Build APK (android)
         run: flutter build apk --release
