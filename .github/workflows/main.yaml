@@ -3,7 +3,7 @@ run-name: ${{ github.actor }} is testing out GitHub Actions 🚀 #Run workflow n
 on: #trigger
   push:
     branches:
-      - main
+      - development
 jobs: 
   setup:
     name: Build & Deploy
@@ -28,6 +28,7 @@ jobs:
         run: |
           flutter --version
           flutter pub get
+      # - name: 
       #4 Build APK (Android)
       - name: Build APK (android)
         run: flutter build apk --release
