@@ -6,8 +6,8 @@ on: #trigger
       - main
 jobs: 
   Explore-GitHub-Actions:
-    name: Build & Release 
-    runs-on: macos-latest 
+    # name: Build & Release #Job name
+    runs-on: macos-latest #Runner
     steps:
       #1 Checkout Repository
       - name: Checkout Repository
