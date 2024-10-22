@@ -1,11 +1,11 @@
-name: GitHub Actions Demo
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀
-on:
+name: GitHub Actions Demo # Workflow name
+run-name: ${{ github.actor }} is testing out GitHub Actions 🚀 #Run workflow name
+on: #trigger
   push:
     branches:
       - main
 jobs: 
-  build:
+  Explore-GitHub-Actions:
     name: Build & Release 
     runs-on: macos-latest 
     steps:
