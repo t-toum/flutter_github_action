@@ -6,7 +6,7 @@ on: #trigger
       - main
 jobs: 
   setup:
-    name: Setup environment
+    name: Build flutter
     runs-on: macos-latest
     steps:
       #1 Checkout Repository
@@ -24,11 +24,7 @@ jobs:
         with:
           channel: stable
           flutter-version: 3.24.3
-  dependencies:
-    name: Install Dependencies
-    runs-on: macos-latest
-    steps:
-      - name: Flutter version
-        run: flutter pub get
-      - name: Dependencies
-        run: flutter pub get
+      - name: Install Dependencies
+        run: |
+          flutter --version
+          flutter pub get
