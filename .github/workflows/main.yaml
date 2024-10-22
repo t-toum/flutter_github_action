@@ -6,7 +6,7 @@ on: #trigger
       - main
 jobs: 
   setup:
-    name: Build flutter
+    name: Build & Deploy
     runs-on: macos-latest
     steps:
       #1 Checkout Repository
