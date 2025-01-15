@@ -1,5 +1,5 @@
 name: GitHub Actions Demo # Workflow name
-run-name: ${{ github.actor }} is testing out GitHub Actions 🚀 #Run workflow name
+run-name: GitHub Actions 🚀 #Run workflow name
 on: #trigger
   push:
     branches:
