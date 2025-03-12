@@ -7,7 +7,7 @@ on: #trigger
 jobs: 
   setup:
     name: Build & Deploy
-    runs-on: macos-latest
+    runs-on: self-hosted
     steps:
       #1 Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
