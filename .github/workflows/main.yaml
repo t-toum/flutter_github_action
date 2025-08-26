@@ -8,6 +8,7 @@ jobs:
   setup:
     name: Build & Deploy
     runs-on: ubuntu-latest
+    environment: dev 
     steps:
       #1 Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
@@ -30,7 +31,7 @@ jobs:
           flutter pub get
       - name: Load environment
         run: |
-          echo "APP_ANME=${{vars.dev.APP_NAME}}" > .env
+          echo "APP_ANME=${{vars.APP_NAME}}" > .env
           cat .env
       - name: Generate env
         run: flutter pub run build_runner build --delete-conflicting-outputs
