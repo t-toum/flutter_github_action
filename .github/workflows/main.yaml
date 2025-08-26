@@ -46,9 +46,9 @@ jobs:
         run: flutter pub run build_runner build --delete-conflicting-outputs
       - name: Build APK
         run: flutter build apk --release
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
-        with:
-          name: Releases
-           path: |
-            build/app/outputs/flutter-apk/app-release.apk
+      # - name: Upload Artifact
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: Releases
+      #      path: |
+      #       build/app/outputs/flutter-apk/app-release.apk
