@@ -34,6 +34,8 @@ jobs:
           echo "APP_ANME=${{vars.APP_NAME}}" > .env
           echo "=========================="
           cat .env
+          echo "=========================="
+          flutter pub run build_runner build --delete-conflicting-outputs
       - name: Generate env
         run: flutter pub run build_runner build --delete-conflicting-outputs
       
