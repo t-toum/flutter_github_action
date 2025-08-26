@@ -3,6 +3,6 @@ part 'env.g.dart';
 
 @Envied(path: '.env')
 abstract class Env {
-  @EnviedField(varName: "APP_ANME", obfuscate: true)
+  @EnviedField(varName: "APP_NAME", obfuscate: true)
   static String appName = _Env.appName;
 }
