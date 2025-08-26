@@ -42,8 +42,8 @@ jobs:
         run: |
           echo "=========================="
           ls -a
-      # - name: Generate env
-      #   run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Generate env
+        run: flutter pub run build_runner build --delete-conflicting-outputs
       
       # #4 Setup Keystore
       # - name: Decode Keystore
