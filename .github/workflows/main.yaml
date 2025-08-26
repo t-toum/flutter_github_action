@@ -4,11 +4,11 @@ on: #trigger
   push:
     branches:
       - development
-jobs: 
+jobs:
   setup:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    environment: dev 
+    environment: dev
     steps:
       #1 Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
@@ -17,7 +17,7 @@ jobs:
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
-          java-version: '17'
+          java-version: "17"
           distribution: "zulu"
       #3 Setup Flutter
       - name: Setup Flutter
@@ -47,8 +47,9 @@ jobs:
       - name: Build APK
         run: flutter build apk --release
       - name: Upload Artifact
-        uses: actions/upload-artifact@v2
-          with:
-            name: Releases
-            path: build/app/outputs/flutter-apk/app-release.apk
-              
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-${{ github.run_number }}
+          path: build/app/outputs/flutter-apk/app-release.apk
+          if-no-files-found: error
+          retention-days: 14
