@@ -16,7 +16,13 @@ jobs:
       #1 Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
         uses: actions/checkout@v4
-
+      - name: Get version info
+        id: version
+        run: |
+          VERSION_NAME=$(grep 'version:' pubspec.yaml | awk '{print $2}' | cut -d '+' -f 1)
+          VERSION_CODE=$(grep 'version:' pubspec.yaml | awk '{print $2}' | cut -d '+' -f 2)
+          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
+          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
       - name: Send Notification to Slack
         uses: slackapi/slack-github-action@v2.1.1
         with:
@@ -30,13 +36,13 @@ jobs:
                     "color": "#36a64f",
                     "fields": [
                         {
-                        "title": "Repository",
-                        "value": "${{ github.repository }}",
+                        "title": "Version",
+                        "value": "${{ env.VERSION_NAME }}",
                         "short": true
                         },
                         {
-                        "title": "Branch",
-                        "value": "${{ github.ref_name }}",
+                        "title": "Build",
+                        "value": "${{ env.BUILD_NUMBER}}",
                         "short": true
                         },
                     ]
