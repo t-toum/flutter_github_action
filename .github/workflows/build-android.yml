@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - main
+      - staging
+      - ddevelopment
   pull_request:
     branches:
       - main
@@ -10,7 +12,8 @@ jobs:
   build:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    environment: Production
+    environment:
+      name: ${{ github.ref_name == 'main' && 'Production' || github.ref_name == 'staging' && 'Staging' || 'Development' }}
     steps:
       # Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
@@ -18,16 +21,6 @@ jobs:
       - name: Read version info
         id: version
         uses: ./.github/actions/flutter-version
-      # - name: Read version info
-      #   id: version
-      #   run: |
-      #     VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
-      #     VERSION_NAME=$(echo "$VERSION_LINE" | cut -d'+' -f1)
-      #     VERSION_CODE=$(echo "$VERSION_LINE" | cut -d'+' -f2)
-
-      #     echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
-      #     echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
-
       - name: Read release notes
         id: notes
         run: |
@@ -91,14 +84,13 @@ jobs:
         if: success()
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          title: "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          title: "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}"
           stage: "success"
-
       # Send Notification to Slack about build failure
       - name: Slack failure notification
         uses: ./.github/actions/slack
         if: failure()
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          title: "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          title: "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}"
           stage: "failure"
