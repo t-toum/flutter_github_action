@@ -38,10 +38,10 @@ jobs:
                     "color": "#36a64f",
                     "fields": [
                         {
-                        "title": "Version ${{ steps.version.outputs.VERSION_NAME }}",
+                        "title": "*Version:* ${{ steps.version.outputs.VERSION_NAME }}",
                         },
                         {
-                        "title": "Build ${{ steps.version.outputs.VERSION_CODE }}",
+                        "title": "*Build number:* ${{ steps.version.outputs.VERSION_CODE }}",
                         },
                     ]
                     }
