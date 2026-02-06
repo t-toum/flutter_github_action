@@ -37,17 +37,11 @@ jobs:
             directory: .
             file_name: .env
             fail_on_empty: true
+            sort_keys: false
         env:
             envkey_APP_NAME: ${{ secrets.APP_NAME }}
-      - name: ECHO
-        run: |
-            echo "=========================="
-            ls -a
-            echo "=========================="
-            cat .env
-            echo "=========================="
-    #   - name: Generate env
-    #     run: flutter pub run build_runner build --delete-conflicting-outputs
+      - name: Code Generation
+        run: flutter pub run build_runner build --delete-conflicting-outputs
     #   - name: Build APK
     #     run: flutter build apk --release
     #   - name: Upload Artifact
