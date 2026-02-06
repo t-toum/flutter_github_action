@@ -1,0 +1,21 @@
+name: Slack Notify
+description: "Send Slack notification"
+inputs:
+  webhook:
+    description: "Slack Webhook URL"
+    required: true
+  title:
+    description: "Notification title"
+    required: true
+runs:
+  using: "composite"
+  steps:
+    - name: Send Notification to Slack
+      uses: slackapi/slack-github-action@v2.1.1
+      with:
+        webhook: ${{ inputs.webhook }}
+        webhook-type: incoming-webhook
+        payload: |
+          {
+            "text": "${{ inputs.title }}",
+          }

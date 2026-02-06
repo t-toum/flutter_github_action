@@ -30,11 +30,15 @@ jobs:
           NOTES=$(cat release_notes.md | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "NOTES=$NOTES" >> $GITHUB_OUTPUT
       - name: Slack notify
-        uses: ./.github/workflows/slack-notify.yml
+        uses: ./.github/actions/slack
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          stage: "start"
           title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+      # - name: Slack notify
+      #   uses: ./.github/workflows/slack-notify.yml
+      #   with:
+      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+      #     title: "New Notify"
       # - name: Send Notification to Slack
       #   uses: slackapi/slack-github-action@v2.1.1
       #   with:
