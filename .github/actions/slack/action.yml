@@ -37,12 +37,11 @@ runs:
                     "value": "${{ inputs.stage == 'success' && 'Success :white_check_mark:' || inputs.stage == 'failure' && 'Failed :x:' || 'In Progress :hourglass_flowing_sand:' }}",
                     "short": false
                   },
-                  {
+                  ${{ inputs.notes && ',{
                     "title": "Release Notes",
-                    "value": "```${{ inputs.notes }}```",
+                    "value": "```' }}${{ inputs.notes }}${{ inputs.notes && '```",
                     "short": false
-                  }
-                  
+                  }' }}
                 ]
               }
             ]
