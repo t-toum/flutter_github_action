@@ -12,37 +12,39 @@ jobs:
     name: Build & Deploy
     runs-on: ubuntu-latest
     steps:
-      #1 Checkout Repository
-      - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
-        uses: actions/checkout@v4
-      #2 Setup Java
-      - name: Setup Java
-        uses: actions/setup-java@v4
-        with:
-          java-version: "17"
-          distribution: "zulu"
-      #3 Setup Flutter
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
-        with:
-          channel: stable
-          flutter-version: 3.24.3
-      - name: Install Dependencies
-        run: |
-          flutter --version
-          flutter pub get
-      - name: Load environment
-        uses: SpicyPizza/create-envfile@v2.0
-        with:
-            directory: .
-            file_name: .env
-            fail_on_empty: true
-            sort_keys: false
-        env:
-            DEBUG: false
-            APP_NAME: ${{ secrets.APP_NAME }}
-      - name: Code Generation
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        #1 Checkout Repository
+        - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
+          uses: actions/checkout@v4
+        #2 Setup Java
+        - name: Setup Java
+          uses: actions/setup-java@v4
+          with:
+            java-version: "17"
+            distribution: "zulu"
+        #3 Setup Flutter
+        - name: Setup Flutter
+          uses: subosito/flutter-action@v2
+          with:
+            channel: stable
+            flutter-version: 3.24.3
+        - name: Install Dependencies
+          run: |
+            flutter --version
+            flutter pub get
+        - name: Load environment
+          uses: SpicyPizza/create-envfile@v2.0
+          with:
+              directory: .
+              file_name: .env
+              fail_on_empty: true
+              sort_keys: false
+          env:
+              DEBUG: false
+              APP_NAME: ${{ secrets.APP_NAME }}
+        - name: Display env file
+          run: cat .env   
+        # - name: Code Generation
+        #     run: flutter pub run build_runner build --delete-conflicting-outputs
     #   - name: Build APK
     #     run: flutter build apk --release
     #   - name: Upload Artifact
