@@ -3,10 +3,10 @@ name: Build Android APK
 on:
     push:
       branches:
-        - development
+        - main
     pull_request:
       branches:
-        - development
+        - main
 jobs:
   build:
     name: Build & Deploy
