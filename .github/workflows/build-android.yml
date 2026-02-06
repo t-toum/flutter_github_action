@@ -35,21 +35,26 @@ jobs:
                 "text": "A new build has been triggered for the Android APK. :rocket:",
                 "attachments": [
                     {
-                    "color": "#36a64f",
-                    "fields": [
-                        {
-                        "title": "*Version:* ${{ steps.version.outputs.VERSION_NAME }}",
-                        },
-                        {
-                        "title": "*Build number:* ${{ steps.version.outputs.VERSION_CODE }}",
-                        },
-                        {
-                        "title": "*Actor:* ${{  github.actor }}",
-                        },
-                        {
-                         "title": "*Branch:* ${{ github.ref }}",   
-                        }
-                    ]
+                        "color": "#36a64f",
+                        "fields": [
+                            {
+                                "title": "*Actor:* ${{  github.actor }}",
+                            },
+                            {
+                                "title": "*Branch:* ${{ github.ref }}",   
+                            },
+                            {
+                                "title": "*Version:* ${{ steps.version.outputs.VERSION_NAME }}",
+                            },
+                            {
+                                "title": "*Build number:* ${{ steps.version.outputs.VERSION_CODE }}",
+                            },
+                            {
+                                "title": "Build Status",
+                                "value": "In Progress :hourglass_flowing_sand:",
+                                "short": false
+                            }
+                        ]
                     }
                 ]
             }
