@@ -38,10 +38,10 @@ runs:
                     "short": false
                   }
                   ${{ inputs.notes && ',{
-            "title": "Release Notes",
-            "value": "```' }}${{ inputs.notes }}${{ inputs.notes && '```",
-            "short": false
-          }' }}
+                    "title": "Release Notes",
+                    "value": "```' }}${{ inputs.notes }}${{ inputs.notes && '```",
+                    "short": false
+                  }' }}
                 ]
               }
             ]
