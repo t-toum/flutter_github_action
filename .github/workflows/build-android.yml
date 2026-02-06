@@ -37,12 +37,12 @@ jobs:
                     "fields": [
                         {
                         "title": "Version",
-                        "value": "${{ env.VERSION_NAME }}",
+                        "value": "${{ steps.version.outputs.VERSION_CODE }}",
                         "short": true
                         },
                         {
                         "title": "Build",
-                        "value": "${{ env.BUILD_NUMBER}}",
+                        "value": "${{ steps.version.outputs.VERSION_CODE }}",
                         "short": true
                         },
                     ]
