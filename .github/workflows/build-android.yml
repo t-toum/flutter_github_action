@@ -29,11 +29,12 @@ jobs:
         run: |
           NOTES=$(cat release_notes.md | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "NOTES=$NOTES" >> $GITHUB_OUTPUT
-      - name: Slack notify
+      - name: Slack start notification
         uses: ./.github/actions/slack
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          stage: "start"
       # - name: Slack notify
       #   uses: ./.github/workflows/slack-notify.yml
       #   with:
@@ -114,7 +115,14 @@ jobs:
       #     file: build/app/outputs/flutter-apk/app-release.apk
       #     releaseNotesFile: release_notes.md
 
-      #   # Send Notification to Slack about build completion
+      # Send Notification to Slack about build completion
+      - name: Slack success notification
+        uses: ./.github/actions/slack
+        if: success()
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          title: "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          stage: "success"
       # - name: Slack Build Success
       #   if: success()
       #   uses: slackapi/slack-github-action@v2.1.1
