@@ -17,13 +17,17 @@ jobs:
         uses: actions/checkout@v4
       - name: Read version info
         id: version
-        run: |
-          VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
-          VERSION_NAME=$(echo "$VERSION_LINE" | cut -d'+' -f1)
-          VERSION_CODE=$(echo "$VERSION_LINE" | cut -d'+' -f2)
+        uses: ./.github/actions/flutter-version
+      # - name: Read version info
+      #   id: version
+      #   run: |
+      #     VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
+      #     VERSION_NAME=$(echo "$VERSION_LINE" | cut -d'+' -f1)
+      #     VERSION_CODE=$(echo "$VERSION_LINE" | cut -d'+' -f2)
 
-          echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
-          echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
+      #     echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
+      #     echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
+
       - name: Read release notes
         id: notes
         run: |
@@ -33,7 +37,7 @@ jobs:
         uses: ./.github/actions/slack
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-          title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n \n*Version:* ${{ steps.version.outputs.version_name }}+${{ steps.version.outputs.version_code }}"
           stage: "start"
           notes: ${{ steps.notes.outputs.NOTES }}
       # Setup Java
@@ -61,13 +65,6 @@ jobs:
           path: ${{ github.workspace }}
           env: |
             APP_NAME=${{ secrets.APP_NAME }}
-        # uses: SpicyPizza/create-envfile@v2.0
-        # with:
-        #   directory: .
-        #   file_name: .env
-        #   fail_on_empty: true
-        #   sort_keys: false
-        #   envkey_APP_NAME: ${{ secrets.APP_NAME }}
       #6 Code Generation
       - name: Code Generation
         run: flutter pub run build_runner build --delete-conflicting-outputs

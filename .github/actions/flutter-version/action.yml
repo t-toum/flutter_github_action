@@ -1,0 +1,22 @@
+name: "Read Flutter version from pubspec"
+description: "Extract VERSION_NAME and VERSION_CODE from pubspec.yaml"
+
+outputs:
+  version_name:
+    description: "Flutter version name"
+    value: ${{ steps.extract.outputs.version_name }}
+  version_code:
+    description: "Flutter version code"
+    value: ${{ steps.extract.outputs.version_code }}
+runs:
+  using: "composite"
+  steps:
+    - id: extract
+      shell: bash
+      run: |
+        VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
+        VERSION_NAME=$(echo "$VERSION_LINE" | cut -d'+' -f1)
+        VERSION_CODE=$(echo "$VERSION_LINE" | cut -d'+' -f2)
+
+        echo "version_name=$VERSION_NAME" >> $GITHUB_OUTPUT
+        echo "version_code=$VERSION_CODE" >> $GITHUB_OUTPUT
