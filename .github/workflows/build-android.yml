@@ -47,21 +47,12 @@ jobs:
                                 "value": "In Progress :hourglass_flowing_sand:",
                                 "short": false
                             },
-                            { "type": "divider" },
                             {
-                                "type": "section",
-                                "text": {
-                                    "type": "mrkdwn",
-                                    "text": "*Release Notes:*"
-                                }
-                            },
-                            {
-                                "type": "section",
-                                "text": {
-                                    "type": "mrkdwn",
-                                    "text": "```${{ steps.notes.outputs.NOTES }}```"
-                                }
+                                "title": "Release Notes",
+                                "value": "```{{ steps.notes.outputs.NOTES }}```",
+                                "short": false
                             }
+                            
                         ]
                     }
                 ]
