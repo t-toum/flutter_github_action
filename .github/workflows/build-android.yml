@@ -16,7 +16,7 @@ jobs:
       #1 Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
         uses: actions/checkout@v4
-      - name: Get version info
+      - name: Read version info
         id: version
         run: |
           VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
@@ -25,6 +25,11 @@ jobs:
 
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
+      - name: Read release notes
+        id: notes
+        run: |
+          NOTES=$(cat release_notes.md | sed ':a;N;$!ba;s/\n/\\n/g')
+          echo "NOTES=$NOTES" >> $GITHUB_OUTPUT
       - name: Send Notification to Slack
         uses: slackapi/slack-github-action@v2.1.1
         with:
@@ -40,6 +45,11 @@ jobs:
                             {
                                 "title": "Build Status",
                                 "value": "In Progress :hourglass_flowing_sand:",
+                                "short": false
+                            },
+                            {
+                                "title": "Release Notes",
+                                "value": "${{ steps.notes.outputs.NOTES }}",
                                 "short": false
                             }
                         ]
@@ -71,9 +81,7 @@ jobs:
           file_name: .env
           fail_on_empty: true
           sort_keys: false
-        #   envkey_APP_NAME: ${{ secrets.APP_NAME }}
-        env:
-          APP_NAME: ${{ secrets.APP_NAME }}
+          envkey_APP_NAME: ${{ secrets.APP_NAME }}
 
       #6 Code Generation
       - name: Code Generation
