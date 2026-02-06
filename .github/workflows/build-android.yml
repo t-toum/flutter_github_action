@@ -90,6 +90,7 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           title: "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
           stage: "success"
+          notes: ${{ steps.notes.outputs.NOTES }}
 
       # Send Notification to Slack about build failure
       - name: Slack failure notification
@@ -99,3 +100,4 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           title: "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
           stage: "failure"
+          notes: ${{ steps.notes.outputs.NOTES }}
