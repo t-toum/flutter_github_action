@@ -55,13 +55,17 @@ jobs:
           flutter pub get
       #5 Load Environment
       - name: Load environment
-        uses: SpicyPizza/create-envfile@v2.0
+        uses: varunkumar/create-env-action@v1
         with:
-          directory: .
-          file_name: .env
-          fail_on_empty: true
-          sort_keys: false
-          envkey_APP_NAME: ${{ secrets.APP_NAME }}
+          env: |
+            APP_NAME=${{ secrets.APP_NAME }}
+        # uses: SpicyPizza/create-envfile@v2.0
+        # with:
+        #   directory: .
+        #   file_name: .env
+        #   fail_on_empty: true
+        #   sort_keys: false
+        #   envkey_APP_NAME: ${{ secrets.APP_NAME }}
       #6 Code Generation
       - name: Code Generation
         run: flutter pub run build_runner build --delete-conflicting-outputs
