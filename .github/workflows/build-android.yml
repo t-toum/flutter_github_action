@@ -32,23 +32,11 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-                "text": "A new build has been triggered for the Android APK. :rocket:",
+                "text": "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
                 "attachments": [
                     {
                         "color": "#36a64f",
                         "fields": [
-                            {
-                                "title": "*Actor:* ${{  github.actor }}",
-                            },
-                            {
-                                "title": "*Branch:* ${{ github.ref }}",   
-                            },
-                            {
-                                "title": "*Version:* ${{ steps.version.outputs.VERSION_NAME }}",
-                            },
-                            {
-                                "title": "*Build number:* ${{ steps.version.outputs.VERSION_CODE }}",
-                            },
                             {
                                 "title": "Build Status",
                                 "value": "In Progress :hourglass_flowing_sand:",
