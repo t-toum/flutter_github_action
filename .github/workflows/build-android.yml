@@ -52,10 +52,9 @@ jobs:
                                 "value": "```${{ steps.notes.outputs.NOTES }}```",
                                 "short": false
                             }
-                            
                         ]
                     }
-                ]`
+                ]
             }
       #2 Setup Java
       - name: Setup Java
