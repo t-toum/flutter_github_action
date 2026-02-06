@@ -63,3 +63,4 @@ jobs:
             serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
             groups: "testers"
             file: build/app/outputs/flutter-apk/app-release.apk
+            releaseNotesFile: release_notes.md
