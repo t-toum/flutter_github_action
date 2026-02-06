@@ -49,13 +49,13 @@ jobs:
                             },
                             {
                                 "title": "Release Notes",
-                                "value": "```{{ steps.notes.outputs.NOTES }}```",
+                                "value": "```${{ steps.notes.outputs.NOTES }}```",
                                 "short": false
                             }
                             
                         ]
                     }
-                ]
+                ]`
             }
       #2 Setup Java
       - name: Setup Java
