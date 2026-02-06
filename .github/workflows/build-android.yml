@@ -38,12 +38,12 @@ jobs:
                         {
                         "title": "Version",
                         "value": "${{ steps.version.outputs.VERSION_CODE }}",
-                        "short": true
+                        "short": false
                         },
                         {
                         "title": "Build",
                         "value": "${{ steps.version.outputs.VERSION_CODE }}",
-                        "short": true
+                        "short": false
                         },
                     ]
                     }
