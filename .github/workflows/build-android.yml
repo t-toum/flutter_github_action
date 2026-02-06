@@ -24,7 +24,7 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-                "text": "🏗️ Android build started",
+                "text": "A new build has been triggered for the Android APK. :rocket:",
                 "attachments": [
                     {
                     "color": "#36a64f",
@@ -39,11 +39,6 @@ jobs:
                         "value": "${{ github.ref_name }}",
                         "short": true
                         },
-                        {
-                        "title": "Commit",
-                        "value": "${{ github.sha }}",
-                        "short": false
-                        }
                     ]
                     }
                 ]
