@@ -46,6 +46,8 @@ jobs:
             echo "Directory content:"
             pwd
             ls -la
+            echo "=================-------------"
+            cat .env
 
         #   run: ls -1
         # - name: Display env content  
