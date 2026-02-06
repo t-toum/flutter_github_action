@@ -4,9 +4,15 @@ inputs:
   webhook:
     description: "Slack Webhook URL"
     required: true
+    type: string
   title:
     description: "Notification title"
     required: true
+    type: string
+  stage:
+    description: "Notification stage (start, success, failure)"
+    required: false
+    type: string
 runs:
   using: "composite"
   steps:
