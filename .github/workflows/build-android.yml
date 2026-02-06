@@ -36,10 +36,9 @@ jobs:
         with:
           directory: .
           file_name: .env
-          env_DEBUG: false
           fail_on_empty: false
           sort_keys: false
-          env_APP_NAME: ${{ vars.APP_NAME }}
+          env_APP_NAME: ${{ secrets.APP_NAME }}
       - name: ECHO
         run: |
           echo "=========================="
