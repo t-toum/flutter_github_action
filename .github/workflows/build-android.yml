@@ -39,8 +39,9 @@ jobs:
             file_name: .env
             fail_on_empty: true
             sort_keys: false
-          env:
-            APP_NAME: ${{ secrets.APP_NAME }}
+            envkey_APP_NAME: ${{ secrets.APP_NAME }}
+        #   env:
+        #     APP_NAME: ${{ secrets.APP_NAME }}
         - name: Display directory content
           run: |
             echo "Directory content:"
