@@ -13,6 +13,10 @@ inputs:
     description: "Notification stage (start, success, failure)"
     required: false
     type: string
+  notes:
+    description: "Release notes to include in the notification"
+    required: false
+    type: string
 runs:
   using: "composite"
   steps:
@@ -32,7 +36,13 @@ runs:
                     "title": "Build Status",
                     "value": "${{ inputs.stage == 'success' && 'Success :white_check_mark:' || inputs.stage == 'failure' && 'Failed :x:' || 'In Progress :hourglass_flowing_sand:' }}",
                     "short": false
+                  },
+                  {
+                    "title": "Release Notes",
+                    "value": "```${{ inputs.notes }}```",
+                    "short": false
                   }
+                  
                 ]
               }
             ]

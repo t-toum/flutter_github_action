@@ -35,37 +35,7 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
           stage: "start"
-      # - name: Slack notify
-      #   uses: ./.github/workflows/slack-notify.yml
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     title: "New Notify"
-      # - name: Send Notification to Slack
-      #   uses: slackapi/slack-github-action@v2.1.1
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     webhook-type: incoming-webhook
-      #     payload: |
-      #       {
-      #           "text": "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-      #           "attachments": [
-      #               {
-      #                   "color": "#36a64f",
-      #                   "fields": [
-      #                       {
-      #                           "title": "Build Status",
-      #                           "value": "In Progress :hourglass_flowing_sand:",
-      #                           "short": false
-      #                       },
-      #                       {
-      #                           "title": "Release Notes",
-      #                           "value": "```${{ steps.notes.outputs.NOTES }}```",
-      #                           "short": false
-      #                       }
-      #                   ]
-      #               }
-      #           ]
-      #       }
+          notes: ${{ steps.notes.outputs.NOTES }}
       #2 Setup Java
       # - name: Setup Java
       #   uses: actions/setup-java@v4
