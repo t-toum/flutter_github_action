@@ -92,7 +92,6 @@ jobs:
       #     fail_on_empty: true
       #     sort_keys: false
       #     envkey_APP_NAME: ${{ secrets.APP_NAME }}
-
       # #6 Code Generation
       # - name: Code Generation
       #   run: flutter pub run build_runner build --delete-conflicting-outputs
@@ -104,7 +103,6 @@ jobs:
       #     name: app-release-${{ github.run_number }}
       #     path: build/app/outputs/flutter-apk/app-release.apk
       #     if-no-files-found: error
-
       # # Upload to Firebase App Distribution
       # - name: Upload APK to Firebase App Distribution
       #   uses: wzieba/Firebase-Distribution-Github-Action@v1
@@ -114,7 +112,6 @@ jobs:
       #     groups: "testers"
       #     file: build/app/outputs/flutter-apk/app-release.apk
       #     releaseNotesFile: release_notes.md
-
       # Send Notification to Slack about build completion
       - name: Slack success notification
         uses: ./.github/actions/slack
@@ -123,48 +120,12 @@ jobs:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           title: "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
           stage: "success"
-      # - name: Slack Build Success
-      #   if: success()
-      #   uses: slackapi/slack-github-action@v2.1.1
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     webhook-type: incoming-webhook
-      #     payload: |
-      #       {
-      #           "text": "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-      #           "attachments": [
-      #               {
-      #                   "color": "#36a64f",
-      #                   "fields": [
-      #                       {
-      #                           "title": "Build Status",
-      #                           "value": "Success :white_check_mark:",
-      #                           "short": false
-      #                       }
-      #                   ]
-      #               }
-      #           ]
-      #       }
-      #   # Send Notification to Slack about build failure
-      # - name: Slack Build Failure
-      #   if: failure()
-      #   uses: slackapi/slack-github-action@v2.1.1
-      #   with:
-      #     webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
-      #     webhook-type: incoming-webhook
-      #     payload: |
-      #       {
-      #           "text": "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-      #           "attachments": [
-      #               {
-      #                   "color": "#ff0000",
-      #                      "fields": [
-      #                       {
-      #                           "title": "Build Status",
-      #                           "value": "Failed :x:",
-      #                           "short": false
-      #                       }
-      #                   ]
-      #               }
-      #           ]
-      #       }
+
+      # Send Notification to Slack about build failure
+      - name: Slack failure notification
+        uses: ./.github/actions/slack
+        if: failure()
+        with:
+          webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
+          title: "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n\n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
+          stage: "failure"

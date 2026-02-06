@@ -24,4 +24,16 @@ runs:
         payload: |
           {
             "text": "${{ inputs.title }}",
+            "attachments": [
+              {
+                "color": "${{ inputs.stage == 'success' && '#36a64f' || inputs.stage == 'failure' && '#ff0000' || '#cccccc' }}",
+                "fields": [
+                  {
+                    "title": "Build Status",
+                    "value": "${{ inputs.stage == 'success' && 'Success :white_check_mark:' || inputs.stage == 'failure' && 'Failed :x:' || 'In Progress :hourglass_flowing_sand:' }}",
+                    "short": false
+                  }
+                ]
+              }
+            ]
           }
