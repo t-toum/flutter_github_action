@@ -2,110 +2,111 @@ name: Build Android APK
 
 on:
   push:
-    branches:
-      - main
+    branches: [main]
   pull_request:
-    branches:
-      - main
+    branches: [main]
+
 jobs:
   build:
-    name: Build & Deploy
     runs-on: ubuntu-latest
     environment: Production
+
     steps:
-      #1 Checkout Repository
-      - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
-        uses: actions/checkout@v4
+      # 🧾 Checkout
+      - uses: actions/checkout@v4
+
+      # 📦 Read version from pubspec
       - name: Read version info
         id: version
         run: |
           VERSION_LINE=$(grep '^version:' pubspec.yaml | sed 's/version:[[:space:]]*//')
           VERSION_NAME=$(echo "$VERSION_LINE" | cut -d'+' -f1)
           VERSION_CODE=$(echo "$VERSION_LINE" | cut -d'+' -f2)
-
           echo "VERSION_NAME=$VERSION_NAME" >> $GITHUB_OUTPUT
           echo "VERSION_CODE=$VERSION_CODE" >> $GITHUB_OUTPUT
+
+      # 📝 Read release notes
       - name: Read release notes
         id: notes
         run: |
           NOTES=$(cat release_notes.md | sed ':a;N;$!ba;s/\n/\\n/g')
           echo "NOTES=$NOTES" >> $GITHUB_OUTPUT
-      - name: Send Notification to Slack
+
+      # 🏗️ Slack — BUILD STARTED
+      - name: Slack Build Started
         uses: slackapi/slack-github-action@v2.1.1
         with:
           webhook: ${{ secrets.SLACK_WEBHOOK_URL }}
           webhook-type: incoming-webhook
           payload: |
             {
-                "text": "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-                "attachments": [
-                    {
-                        "color": "#36a64f",
-                        "fields": [
-                            {
-                                "title": "Build Status",
-                                "value": "In Progress :hourglass_flowing_sand:",
-                                "short": false
-                            },
-                            {
-                                "title": "Release Notes",
-                                "value": "```${{ steps.notes.outputs.NOTES }}```",
-                                "short": false
-                            }
-                        ]
-                    }
-                ]
+              "blocks": [
+                { "type": "header",
+                  "text": { "type": "plain_text", "text": "🏗️ Android Build Started" }
+                },
+                { "type": "section",
+                  "fields": [
+                    { "type": "mrkdwn", "text": "*Repo:* ${{ github.repository }}" },
+                    { "type": "mrkdwn", "text": "*Branch:* ${{ github.ref_name }}" },
+                    { "type": "mrkdwn", "text": "*Actor:* ${{ github.actor }}" },
+                    { "type": "mrkdwn", "text": "*Version:* v${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}" }
+                  ]
+                },
+                { "type": "divider" },
+                { "type": "section",
+                  "text": { "type": "mrkdwn", "text": "*Release Notes:*" }
+                },
+                { "type": "section",
+                  "text": { "type": "mrkdwn", "text": "```${{ steps.notes.outputs.NOTES }}```" }
+                }
+              ]
             }
-      #2 Setup Java
-      - name: Setup Java
-        uses: actions/setup-java@v4
+
+      # ☕ Java + Flutter
+      - uses: actions/setup-java@v4
         with:
+          distribution: zulu
           java-version: "17"
-          distribution: "zulu"
-      #3 Setup Flutter
-      - name: Setup Flutter
-        uses: subosito/flutter-action@v2
+
+      - uses: subosito/flutter-action@v2
         with:
-          channel: stable
           flutter-version: 3.24.3
-      #4 Install Dependencies
-      - name: Install Dependencies
-        run: |
-          flutter --version
-          flutter pub get
-      #5 Load Environment
-      - name: Load environment
-        uses: SpicyPizza/create-envfile@v2.0
+
+      # 📦 Dependencies
+      - run: flutter pub get
+
+      # 🔐 Create .env (FIXED v2 syntax)
+      - name: Create .env
+        uses: SpicyPizza/create-envfile@v2
         with:
-          directory: .
           file_name: .env
           fail_on_empty: true
-          sort_keys: false
-          envkey_APP_NAME: ${{ secrets.APP_NAME }}
+        env:
+          APP_NAME: ${{ secrets.APP_NAME }}
 
-      #6 Code Generation
-      - name: Code Generation
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-      - name: Build APK
-        run: flutter build apk --release
-      - name: Upload Artifact
-        uses: actions/upload-artifact@v4
+      # ⚙️ Envied generation
+      - run: dart run build_runner build --delete-conflicting-outputs
+
+      # 📱 Build APK
+      - run: flutter build apk --release
+
+      # 📦 Upload artifact
+      - uses: actions/upload-artifact@v4
         with:
           name: app-release-${{ github.run_number }}
           path: build/app/outputs/flutter-apk/app-release.apk
-          if-no-files-found: error
 
-      # Upload to Firebase App Distribution
-      - name: Upload APK to Firebase App Distribution
+      # 🔥 Firebase Distribution
+      - name: Upload to Firebase
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_APP_ID }}
           serviceCredentialsFileContent: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-          groups: "testers"
+          groups: testers
           file: build/app/outputs/flutter-apk/app-release.apk
           releaseNotesFile: release_notes.md
 
-        # Send Notification to Slack about build completion
+      # 🚀 Slack SUCCESS
       - name: Slack Build Success
         if: success()
         uses: slackapi/slack-github-action@v2.1.1
@@ -114,22 +115,21 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-                "text": "The Android APK build has completed successfully! :tada: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-                "attachments": [
-                    {
-                        "color": "#36a64f",
-                        "fields": [
-                            {
-                                "title": "Build Status",
-                                "value": "Success :white_check_mark:",
-                                "short": false
-                            }
-                        ]
-                    }
-                ]
+              "blocks": [
+                { "type": "header",
+                  "text": { "type": "plain_text", "text": "🚀 Android Build Distributed" }
+                },
+                { "type": "section",
+                  "fields": [
+                    { "type": "mrkdwn", "text": "*Version:* v${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}" },
+                    { "type": "mrkdwn", "text": "*Branch:* ${{ github.ref_name }}" }
+                  ]
+                }
+              ]
             }
-        # Send Notification to Slack about build failure
-      - name: Slack Build Failure
+
+      # ❌ Slack FAILURE
+      - name: Slack Build Failed
         if: failure()
         uses: slackapi/slack-github-action@v2.1.1
         with:
@@ -137,17 +137,15 @@ jobs:
           webhook-type: incoming-webhook
           payload: |
             {
-                "text": "The Android APK build has failed. :x: \n\n*Repository:* ${{ github.repository }} \n*Triggered by*: ${{ github.actor }} \n*Branch:* ${{ github.ref_name }} \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}",
-                "attachments": [
-                    {
-                        "color": "#ff0000",
-                           "fields": [
-                            {
-                                "title": "Build Status",
-                                "value": "Failed :x:",
-                                "short": false
-                            }
-                        ]
-                    }
-                ]
+              "blocks": [
+                { "type": "header",
+                  "text": { "type": "plain_text", "text": "❌ Android Build Failed" }
+                },
+                { "type": "section",
+                  "fields": [
+                    { "type": "mrkdwn", "text": "*Branch:* ${{ github.ref_name }}" },
+                    { "type": "mrkdwn", "text": "*Version:* v${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}" }
+                  ]
+                }
+              ]
             }
