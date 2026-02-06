@@ -34,11 +34,11 @@ jobs:
       - name: Load environment
         uses: SpicyPizza/create-envfile@v2.0
         with:
-            envkey_APP_NAME: ${{ secrets.APP_NAME }}
             directory: .
             file_name: .env
             fail_on_empty: true
-            sort_keys: false
+        env:
+            envkey_APP_NAME: ${{ secrets.APP_NAME }}
       - name: ECHO
         run: |
             echo "=========================="
