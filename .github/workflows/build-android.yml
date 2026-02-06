@@ -57,6 +57,8 @@ jobs:
       - name: Load environment
         uses: varunkumar/create-env-action@v1
         with:
+          file: .env
+          path: .
           env: |
             APP_NAME=${{ secrets.APP_NAME }}
         # uses: SpicyPizza/create-envfile@v2.0
