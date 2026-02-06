@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     environment: Production
     steps:
-      #1 Checkout Repository
+      # Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
         uses: actions/checkout@v4
       - name: Read version info
@@ -36,7 +36,7 @@ jobs:
           title: "A new build has been triggered for the Android APK. :rocket: \n\n*Repository:* ${{ github.repository }} \n\n*Triggered by*: ${{ github.actor }} \n\n*Branch:* ${{ github.ref_name }} \n \n*Version:* ${{ steps.version.outputs.VERSION_NAME }}+${{ steps.version.outputs.VERSION_CODE }}"
           stage: "start"
           notes: ${{ steps.notes.outputs.NOTES }}
-      #2 Setup Java
+      # Setup Java
       - name: Setup Java
         uses: actions/setup-java@v4
         with:
@@ -58,6 +58,7 @@ jobs:
         uses: varunkumar/create-env-action@v1
         with:
           file: .env
+          path: ${{ github.workspace }}
           env: |
             APP_NAME=${{ secrets.APP_NAME }}
         # uses: SpicyPizza/create-envfile@v2.0
