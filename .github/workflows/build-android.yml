@@ -36,14 +36,10 @@ jobs:
                     "color": "#36a64f",
                     "fields": [
                         {
-                        "title": "Version",
-                        "value": "${{ steps.version.outputs.VERSION_CODE }}",
-                        "short": false
+                        "title": "Version ${{ steps.version.outputs.VERSION_CODE }}",
                         },
                         {
-                        "title": "Build",
-                        "value": "${{ steps.version.outputs.VERSION_CODE }}",
-                        "short": false
+                        "title": "Build ${{ steps.version.outputs.VERSION_CODE }}",
                         },
                     ]
                     }
