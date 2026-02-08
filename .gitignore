@@ -1,7 +1,3 @@
-.env
-.env.prod
-.env.dev
-/key
 # Miscellaneous
 *.class
 *.log
@@ -9,20 +5,19 @@
 *.swp
 .DS_Store
 .atom/
+.build/
 .buildlog/
 .history
 .svn/
+.swiftpm/
 migrate_working_dir/
 
 # IntelliJ related
 *.iml
 *.ipr
 *.iws
-.idea/libraries/
-.idea/*
-!.idea/runConfigurations/
-.idea/workspace.xml
-
+.idea/
+.env
 
 
 # The .vscode folder contains launch configuration and tasks you configure in
@@ -34,15 +29,11 @@ migrate_working_dir/
 **/doc/api/
 **/ios/Flutter/.last_build_id
 .dart_tool/
-.flutter-plugins
 .flutter-plugins-dependencies
-.packages
 .pub-cache/
 .pub/
 /build/
-
-# Web related
-lib/generated_plugin_registrant.dart
+/coverage/
 
 # Symbolication related
 app.*.symbols
@@ -54,18 +45,3 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
-
-*.g.dart
-env_service.g.dart
-.fvm/
-
-google-services-prod.json
-google-services-dev.json
-
-GoogleService-Info-prod.plist
-GoogleService-Info-dev.plist
-
-firebase_options-dev.dart
-firebase-dev.json
-firebase_options-prod.dart
-firebase-prod.json

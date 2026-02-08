@@ -67,8 +67,10 @@ jobs:
             APP_NAME=${{ secrets.APP_NAME }}
       #Code Generation
       - name: Code Generation
-        run: flutter pub run build_runner build --delete-conflicting-outputs
-
+        run: |
+          flutter pub run build_runner build --delete-conflicting-outputs
+          flutter pub run easy_localization:generate --source-dir ./assets/translations -f keys -o locale_keys.g.dart
+          
       #Build APK
       - name: Build android APK
         uses: cedvdb/action-flutter-build-android@v1
