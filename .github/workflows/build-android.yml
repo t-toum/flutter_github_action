@@ -12,8 +12,8 @@ jobs:
   build:
     name: Build & Deploy
     runs-on: ubuntu-latest
-    environment:
-      name: ${{ github.ref_name == 'main' && 'Production' || github.ref_name == 'staging' && 'Staging' || 'Development' }}
+    environment: Development
+    #   name: ${{ github.ref_name == 'main' && 'Production' || github.ref_name == 'staging' && 'Staging' || 'Development' }}
     steps:
       # Checkout Repository
       - name: Checkout Repository #checkout action to check out (or clone) the repository code into the workflow environment.
@@ -39,18 +39,25 @@ jobs:
         with:
           java-version: "17"
           distribution: "zulu"
-      #3 Setup Flutter
+      # Setup Flutter
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
         with:
           channel: stable
+          cache: true
           flutter-version: 3.24.3
-      #4 Install Dependencies
+          # optional parameters follow
+          cache-key: "flutter-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache
+          cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+          pub-cache-key: "flutter-pub-:os:-:channel:-:version:-:arch:-:hash:" # optional, change this to force refresh cache of dart pub get dependencies
+          pub-cache-path: "${{ runner.tool_cache }}/flutter/:channel:-:version:-:arch:" # optional, change this to specify the cache path
+
+      # Install Dependencies
       - name: Install Dependencies
         run: |
           flutter --version
           flutter pub get
-      #5 Load Environment
+      # Load Environment
       - name: Load environment
         uses: varunkumar/create-env-action@v1
         with:
@@ -58,11 +65,19 @@ jobs:
           path: ${{ github.workspace }}
           env: |
             APP_NAME=${{ secrets.APP_NAME }}
-      #6 Code Generation
+      #Code Generation
       - name: Code Generation
         run: flutter pub run build_runner build --delete-conflicting-outputs
-      - name: Build APK
-        run: flutter build apk --release
+
+      #Build APK
+      - name: Build android APK
+        uses: cedvdb/action-flutter-build-android@v1
+        with:
+          keystore-base64: ${{ secrets.KEYSTORE_BASE64 }}
+          keystore-password: ${{ secrets.KEY_STORE_PASSWORD}}
+          build-cmd: flutter build apk --release
+          working-directory: ./
+
       - name: Upload Artifact
         uses: actions/upload-artifact@v4
         with:
