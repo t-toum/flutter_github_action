@@ -1,13 +1,14 @@
 name: Build Android APK
 on:
-  push:
-    branches:
-      - main
-      - staging
-      - development
-  pull_request:
-    branches:
-      - main
+  workflow_dispatch:
+  # push:
+  #   branches:
+  #     - main
+  #     - staging
+  #     - development
+  # pull_request:
+  #   branches:
+  #     - main
 jobs:
   build:
     name: Build & Deploy
